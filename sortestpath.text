@@ -1,0 +1,184 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define INF 0x3f3f3f3f
+const int N=1e5+10;
+typedef pair<int,int> ipair;
+vector<ipair>adj[N];
+
+void shortestpath(int s,vector<pair<int,int> >adj[],int ver,int destination){
+   priority_queue<ipair,vector<ipair>,greater<ipair> >pq;
+   vector<int>dist(N,INF);
+    pq.push({0,s});
+    dist[s]=0;
+    while(!pq.empty()){
+        int u=pq.top().second;
+        pq.pop();
+        vector<pair<int,int> >::iterator it;
+        for(it=adj[u].begin();it!=adj[u].end();it++){
+            int v=(*it).first;
+            int weight=(*it).second;
+            if(dist[u]+weight<dist[v]){
+                dist[v]=dist[u]+weight;
+                pq.push({dist[v],v});
+            }
+        }
+    }
+  cout<<dist[destination]<<endl;
+}
+int main(){
+    int ver,edges;
+    cout<<"Enter the number of vertex:";
+    cin>>ver;
+
+    cout<<"Enter the edges:";
+    cin>>edges;
+    for(int i=1;i<=edges;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        adj[x].push_back({y,z});
+    }
+    int src,desti;
+    cout<<"Enter the source vertex:";
+    cin>>src;
+    cout<<"Enter the Destination:";
+    cin>>desti;
+    shortestpath(src,adj,ver,desti);
+}
+
+
+// flude
+#include<bits/stdc++.h>
+using namespace std;
+#define INF 1e5+10
+const int n=1e5+10;
+
+int main(){
+  int s;
+  cout<<"Enter the size:";
+  cin>>s;
+  int arr[s][s];
+  for(int i=1;i<=s;i++){
+    for(int j=1;j<=s;j++){
+    if(i==j){
+     arr[i][j]=0;
+    }
+    else{
+      arr[i][j]=INF;
+    }
+   }
+  }
+ int e;
+ cout<<"Enter the number of Edges:";
+ cin>>e;
+ for(int i=1;i<=e;i++){
+   int x,y,z;
+   cin>>x>>y>>z;
+   arr[x][y]=z;
+ }
+ for(int k=1;k<=s;k++){
+   for(int i=1;i<=s;i++){
+     for(int j=1;j<=s;j++){
+       arr[i][j]=min(arr[i][j],arr[i][k]+arr[k][j]);
+     }
+   }
+ }
+ for(int i=1;i<=s;i++){
+   for(int j=1;j<=s;j++){
+     if(arr[i][j]==INF){
+       cout<<"INF"<<endl;
+     }
+     cout<<"  ";
+     cout<<arr[i][j]<<" ";
+   }
+     cout<<endl;
+  }
+}
+
+// knapshak
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 105, M = 1005;
+
+int n, m;
+int w[N], v[N];
+int dp[M];
+
+int main() {
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) cin >> w[i] >> v[i];
+
+    memset(dp, 0, sizeof(dp));
+    for (int i = 1; i <= n; i++) {
+        for (int j = m; j >= w[i]; j--) {
+            dp[j] = max(dp[j], dp[j-w[i]] + v[i]);
+        }
+    }
+    cout << dp[m] << endl;
+    return 0;
+}
+
+
+//lcs
+#include <iostream>
+#include <string>
+using namespace std;
+
+string A, B;
+int dp[1005][1005];
+
+int main() {
+    cin >> A >> B;
+    int m = A.length(), n = B.length();
+
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= n; j++) {
+            if (i == 0 || j == 0) {
+                dp[i][j] = 0;
+            } else if (A[i-1] == B[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1;
+            } else {
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+
+    cout << "Length of LCS: " << dp[m][n] << endl;
+    return 0;
+}
+
+// bfs
+#include<stdio.h>
+int a[20][20], q[20], visited[20], n, i, j, f = 0, r = -1;
+void bfs(int v) {
+for(i = 1; i <= n; i++)
+if(a[v][i] && !visited[i])
+q[++r] = i;
+if(f <= r) {
+visited[q[f]] = 1;
+bfs(q[f++]); } }
+void main() {
+int v;
+printf("\n Enter the number of vertices:");
+scanf("%d", &n);
+for(i=1; i <= n; i++) {
+q[i] = 0;
+visited[i] = 0;
+}
+printf("\n Enter graph data in matrix form:\n");
+for(i=1; i<=n; i++) {
+for(j=1;j<=n;j++) {
+scanf("%d", &a[i][j]); } }
+printf("\n Enter the starting vertex:");
+scanf("%d", &v);
+bfs(v);
+printf("\n The node which are reachable are:\n");
+for(i=1; i <= n; i++) {
+if(visited[i])
+printf("%d\t", i);
+else {
+printf("\n Bfs is not possible. Not all nodes are reachable");
+break; } } 
+}
